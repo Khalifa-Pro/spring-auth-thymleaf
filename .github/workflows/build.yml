@@ -26,6 +26,6 @@ jobs:
       - name: Build & Push Docker Image
         run: |
           mvn spring-boot:build-image \
-            -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USER }}/spring-auth-thymeleaf:${{ github.sha }} \
+            -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USER }}/spring-auth-thymeleaf-alkhalifa:${{ github.sha }} \
             -Dspring-boot.build-image.publish=true \
             -DskipTests
