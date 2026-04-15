@@ -7,13 +7,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'   # ou 8 selon ton Spring Boot
+          java-version: '17'
           distribution: 'temurin'
           cache: maven
 
@@ -23,9 +28,12 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build & Push Docker Image
+      - name: Build Image
         run: |
           mvn spring-boot:build-image \
             -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_USER }}/spring-auth-thymeleaf-alkhalifa:${{ github.sha }} \
-            -Dspring-boot.build-image.publish=true \
             -DskipTests
+
+      - name: Push Image
+        run: |
+          docker push ${{ secrets.DOCKER_USER }}/spring-auth-thymeleaf-alkhalifa:${{ github.sha }}
